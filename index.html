@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>London Bus</title>
+<!-- Faz o navegador reconhecer como aplicativo -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<!-- iPhone: ícone e tela cheia -->
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="London Bus">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="icon-192.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #f2f2f7; }
+  @media (prefers-color-scheme: dark) { html, body { background: #000; } }
+  /* o app ocupa a tela toda, respeitando o notch do iPhone */
+  iframe {
+    position: fixed; border: 0;
+    top: env(safe-area-inset-top, 0px); left: 0;
+    width: 100%; height: calc(100% - env(safe-area-inset-top, 0px));
+  }
+  #off {
+    display: none; position: fixed; inset: 0; place-items: center; text-align: center;
+    font: 17px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #6c6c70; padding: 24px;
+  }
+  body.offline #off { display: grid; }
+  body.offline iframe { display: none; }
+</style>
+</head>
+<body>
+<!-- Endereço do app do Apps Script (não muda quando você implanta versões novas) -->
+<iframe src="https://script.google.com/macros/s/AKfycbxpISHfZ24rl4XTOsNuvF9JrYzINVOEIlXV9OHd97uXawCqO7oW1T-8vReibkr_VIPsQg/exec"
+        title="Controle Financeiro" allow="clipboard-write"></iframe>
+<div id="off"><div><b style="color:inherit">Sem internet</b><br>O Controle Financeiro precisa de conexão para carregar os lançamentos.</div></div>
+<script>
+  // avisa quando o celular está sem internet
+  function net(){ document.body.classList.toggle('offline', !navigator.onLine); }
+  addEventListener('online', net); addEventListener('offline', net); net();
+  // registra o service worker (exigido para o Android oferecer "Instalar app")
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
